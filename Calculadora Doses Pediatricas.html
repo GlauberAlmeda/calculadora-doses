@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Doses Pediátricas - COMPLETA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      font-weight: bold;
+      border: none;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #resultado {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Calculadora de Doses Pediátricas</h2>
+
+  <label for="medicamento">Medicamento:</label>
+  <select id="medicamento">
+    <option value="">-- Selecione --</option>
+    <option value="clavulin_bd">Clavulin Bd</option><option value="clavulin_es">Clavulin Es</option><option value="zinnat">Zinnat</option><option value="terza">Terza</option><option value="klaricid">Klaricid</option><option value="ceclor">Ceclor</option><option value="trifamox">Trifamox</option><option value="prelone_gotas">Prelone Gotas</option><option value="prelone_xarope">Prelone Xarope</option><option value="profenid">Profenid</option><option value="novalgina">Novalgina</option><option value="tylenol">Tylenol</option><option value="alivium">Alivium</option><option value="koide_d">Koide D</option><option value="decongex">Decongex</option><option value="zyxen">Zyxen</option><option value="allegra">Allegra</option><option value="esalerg">Esalerg</option><option value="montelair">Montelair</option><option value="percof">Percof</option><option value="avamys">Avamys</option><option value="nasoar">Nasoar</option><option value="rinosoro">Rinosoro</option>
+  </select>
+
+  <div id="entrada-peso" style="display:none;">
+    <label for="peso">Peso (kg):</label>
+    <input type="number" id="peso" step="0.1">
+  </div>
+
+  <div id="entrada-idade" style="display:none;">
+    <label for="idade">Idade (anos):</label>
+    <input type="number" id="idade" step="0.1">
+  </div>
+
+  <button onclick="calcularDose()">Calcular Dose</button>
+
+  <div id="resultado"></div>
+
+  <script>
+
+const config = {
+  clavulin_bd: { peso: true },
+  clavulin_es: { peso: true },
+  zinnat: { peso: true },
+  terza: { peso: true },
+  klaricid: { peso: true },
+  ceclor: { peso: true },
+  trifamox: { peso: true },
+  prelone_gotas: { peso: true },
+  prelone_xarope: { peso: true },
+  profenid: { peso: true },
+  novalgina: { peso: true },
+  tylenol: { peso: true },
+  alivium: { peso: true },
+  koide_d: { idade: true },
+  decongex: { peso: true },
+  zyxen: { idade: true },
+  allegra: { idade: true },
+  esalerg: { idade: true },
+  montelair: { idade: true },
+  percof: { peso: true },
+  avamys: {},
+  nasoar: {},
+  rinosoro: {}
+};
+
+document.getElementById('medicamento').addEventListener('change', () => {
+  const med = document.getElementById('medicamento').value;
+  document.getElementById('entrada-peso').style.display = config[med]?.peso ? 'block' : 'none';
+  document.getElementById('entrada-idade').style.display = config[med]?.idade ? 'block' : 'none';
+  document.getElementById('resultado').innerHTML = '';
+});
+
+function calcularDose() {
+  const med = document.getElementById('medicamento').value;
+  const peso = parseFloat(document.getElementById('peso').value);
+  const idade = parseFloat(document.getElementById('idade').value);
+  let texto = '';
+
+  if (!med) {
+    texto = "Selecione um medicamento.";
+  } else if (config[med]?.peso && isNaN(peso)) {
+    texto = "Informe o peso.";
+  } else if (config[med]?.idade && isNaN(idade)) {
+    texto = "Informe a idade.";
+  } else {
+    switch(med) {
+      case "clavulin_bd":
+        const bd = 80;
+        texto = `tomar ${(peso * 50 / 2 / bd).toFixed(2)} a ${Math.min(peso * 70 / 2 / bd, 875 / bd).toFixed(2)} mL de 12/12h por 10 dias`;
+        break;
+      case "clavulin_es":
+        const es = 120;
+        texto = `tomar ${(peso * 80 / 2 / es).toFixed(2)} a ${Math.min(peso * 90 / 2 / es, 875 / es).toFixed(2)} mL de 12/12h por 10 dias`;
+        break;
+      case "zinnat":
+        const z = 50;
+        texto = `tomar ${(peso * 20 / 2 / z).toFixed(2)} a ${Math.min(peso * 30 / 2 / z, 500 / z).toFixed(2)} mL de 12/12h por 10 dias`;
+        break;
+      case "terza":
+        const t = 250 / 5;
+        texto = `tomar ${(Math.min(peso * 14, 600) / t).toFixed(2)} mL em dose única diária por 10 dias`;
+        break;
+      case "klaricid":
+        const k = 50;
+        texto = `tomar ${(Math.min(peso * 15, 1000) / 2 / k).toFixed(2)} mL de 12/12h por 10 dias`;
+        break;
+      case "ceclor":
+        const c = 375 / 5;
+        texto = `tomar ${(peso * 20 / 2 / c).toFixed(2)} a ${Math.min(peso * 40 / 2 / c, 1000 / c).toFixed(2)} mL de 12/12h por 10 dias`;
+        break;
+      case "trifamox":
+        const tri = 200;
+        texto = `tomar ${(peso * 40 / 2 / tri).toFixed(2)} a ${Math.min(peso * 100 / 2 / tri, 875 / tri).toFixed(2)} mL de 12/12h por 10 dias`;
+        break;
+      case "prelone_gotas":
+        texto = `tomar ${peso} gotas de 12/12h por 5 dias\n\ntomar ${peso} gotas pela manhã por 3 dias\n\ntomar ${(peso / 2).toFixed(1)} gotas pela manhã por 2 dias`;
+        break;
+      case "prelone_xarope":
+        texto = `tomar ${(peso * 1 / 3).toFixed(1)} mL ao dia por 5 dias\n\ntomar ${(peso * 0.5 / 3).toFixed(1)} mL ao dia por 3 dias\n\ntomar ${(peso * 0.25 / 3).toFixed(1)} mL ao dia por 2 dias`;
+        break;
+      case "profenid":
+      case "novalgina":
+      case "tylenol":
+      case "alivium":
+        texto = `tomar ${Math.round(peso)} gotas de ${med === 'profenid' ? '8/8h por 5 dias' : '6/6h se necessário'}`;
+        break;
+      case "koide_d":
+        if (idade >= 2 && idade <= 6) texto = "tomar 2,5 mL de 8/8h por 5 dias";
+        else if (idade >= 7 && idade <= 12) texto = "tomar 5 mL de 8/8h por 5 dias";
+        else if (idade > 12) texto = "tomar 10 mL de 8/8h por 5 dias";
+        else texto = "Idade fora da faixa para Koide D";
+        break;
+      case "decongex":
+        texto = `tomar ${Math.round((peso * 2) / 3)} gotas de 8/8h por 5 dias`;
+        break;
+      case "zyxen":
+        if (idade >= 2 && idade <= 5) texto = "tomar 5 gotas de 12/12h por 30 dias";
+        else if (idade >= 6) texto = "tomar 20 gotas ao dia por 30 dias";
+        else texto = "Idade fora da faixa para Zyxen";
+        break;
+      case "allegra":
+        if (idade >= 0.5 && idade < 2) texto = "tomar 2,5 mL de 12/12h por 30 dias";
+        else if (idade >= 2 && idade <= 11) texto = "tomar 5 mL de 12/12h por 30 dias";
+        else texto = "Idade fora da faixa para Allegra";
+        break;
+      case "esalerg":
+        if (idade >= 0.5 && idade < 1) texto = "tomar 2 mL ao dia por 30 dias";
+        else if (idade >= 1 && idade <= 5) texto = "tomar 2,5 mL ao dia por 30 dias";
+        else if (idade >= 6 && idade <= 11) texto = "tomar 5 mL ao dia por 30 dias";
+        else texto = "Idade fora da faixa para Esalerg";
+        break;
+      case "montelair":
+        if (idade >= 2 && idade <= 5) texto = "tomar 1 comprimido de 4 mg ao dia por 30 dias";
+        else if (idade >= 6 && idade <= 14) texto = "tomar 1 comprimido de 5 mg ao dia por 30 dias";
+        else if (idade >= 15) texto = "tomar 1 comprimido de 10 mg ao dia por 30 dias";
+        else texto = "Idade fora da faixa para Montelair";
+        break;
+      case "percof":
+        if (peso >= 10 && peso <= 20) texto = "tomar 3 mL de 8/8h por 5 dias";
+        else if (peso >= 21 && peso <= 30) texto = "tomar 5 mL de 8/8h por 5 dias";
+        else texto = "Peso fora da faixa para Percof";
+        break;
+      case "avamys":
+        texto = "aplicar 1 jato em cada narina à noite por 30 dias";
+        break;
+      case "nasoar":
+        texto = "diluir 1 sachê em 120 mL de água morna e aplicar suavemente nas narinas";
+        break;
+      case "rinosoro":
+        texto = "aplicar na cavidade nasal várias vezes ao dia conforme necessário";
+        break;
+      default:
+        texto = "Cálculo ainda não disponível.";
+    }
+  }
+
+  document.getElementById("resultado").innerHTML = `<strong>Prescrição sugerida:</strong><br><pre>${texto}</pre>`;
+}
+
+  </script>
+</body>
+</html>
